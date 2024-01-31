@@ -1,0 +1,23 @@
+/////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
+/////AUTHOR: Maxime Abade <https://github.com/maximeabade>          /////
+/////VERSION: 1.0                                                   /////
+/////DATE OF CREATE: 26/01/2024                                     /////
+/////DATE OF LAST MODIF: 26/01/2024                                 /////
+/////NAME: LIGHT.CPP                                                /////
+/////INPUTS: EXIT_SUCCESS                                           /////
+/////OUTPUTS: CREATION OF LIGHTS                                    /////
+/////BRIEF: On définit les fonctions nécessaires à la création      /////                                                               
+/////       et l'utilisation des LIGHTS                             /////
+/////                                                               /////
+/////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
+using namespace std;
+
+#include "Light.hpp"
+
+Light::Light(){ status = false; }
+
+Light::isOn(){ return status; }
+
+Light::toggle(){ status = !status; }
