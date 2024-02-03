@@ -35,7 +35,7 @@ int main() {
 
     double result = sum_sqrt(myVector);
 
-    std::cout << "Sum of square roots: " << result << std::endl;
+    std::cout << "Norme euclidienne " << result << std::endl;
 
     return 0;
 }

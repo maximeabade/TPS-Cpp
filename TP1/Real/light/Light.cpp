@@ -13,11 +13,13 @@
 /////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////
 using namespace std;
-
 #include "Light.hpp"
 
-Light::Light(){ status = false; }
 
-Light::isOn(){ return status; }
+#include <iostream>
 
-Light::toggle(){ status = !status; }
+
+//creeons une lampe par defaut
+Light::Light() {
+    status = false;
+}

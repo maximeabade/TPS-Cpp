@@ -21,12 +21,10 @@ using namespace std;
 class Light {
 public:
     bool status;
-    bool isOn() { return status; }
+    bool isOn() const { return status; }
     void toggle() { status = !status; }
-
-
-
+    Light();
+private:
+    //no private things to have
 };
-
-
 #endif
