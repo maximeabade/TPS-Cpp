@@ -1,13 +1,13 @@
-#include "Disk.hpp"  // Include necessary headers
+#include "Disk.hpp"
 #include "Tower.hpp"
 #include "Game.hpp"
 #include <iostream>
 
-using namespace std;  // Avoid using `using namespace std;`
+using namespace std;
 
 int main() {
-    Game g = Game();
-    g.display();
-    g.solve();
+    Game game = Game();
+    game.display();
+    game.solve(4, game.t1, game.t2, game.t3);
     return 0;
 }

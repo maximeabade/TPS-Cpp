@@ -11,12 +11,10 @@ public:
     Tower(const std::string& name);  // Constructor
 
     void pushDisk(int diskSize);  // Add a disk of specified size
-    void popDisk();               // Remove the top disk
+    Disk popDisk();               // Remove the top disk
     void display() const;         // Display the tower's state (const for readability)
 
-    ~Tower();                   // Destructor for proper memory management
 
-    friend std::ostream& operator<<(std::ostream& out, const Tower& tower);  // Friend for output
 
 private:
     std::string name;
