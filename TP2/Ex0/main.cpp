@@ -25,5 +25,6 @@ int main()
   Fraction f2(10);  // par parametre
   Fraction f3(3,7); // par parametres
   
+std::cout << f3 << std::endl; //use of friend function
   return EXIT_SUCCESS;
 }
