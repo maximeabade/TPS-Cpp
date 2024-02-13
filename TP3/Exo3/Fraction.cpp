@@ -32,7 +32,8 @@ Fraction Fraction::operator * (int n) {
   return *this;
 }
 
-Fraction operator * (int n, const Fraction& f) {
-  return f * n;
-}
 
+// Non-member operator overload for int * Fraction
+Fraction operator*(int n, const Fraction& f) {
+    return Fraction(n * f.numerateur, f.denominateur); // Create a new Fraction
+}

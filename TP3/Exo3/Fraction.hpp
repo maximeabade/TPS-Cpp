@@ -16,7 +16,8 @@ class Fraction
     Fraction (int n,int d);
     Fraction operator * (const Fraction& f);
     Fraction operator * (int n);
-    Fraction operator * (int n,const Fraction& f); // on veut faire des override de l'operateur *
+    //friend to overload the operator * for the case of int * Fraction
+    friend Fraction operator * (int n, const Fraction& f);
     // Destructeur
     ~Fraction();
     // C’est une fonction AMIE, pas une methode membre
