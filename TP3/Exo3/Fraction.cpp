@@ -37,3 +37,18 @@ Fraction Fraction::operator * (int n) {
 Fraction operator*(int n, const Fraction& f) {
     return Fraction(n * f.numerateur, f.denominateur); // Create a new Fraction
 }
+
+//NEXT STEP: REDEFINITION DES METHODES + - ET / POUR FRACTION
+/*
++ : de fraction a fraction, faire un return de fraction( fraction1.num * fraction2.den + fraction2.num * fraction1.den , fraction1.den * fraction2.den )
+    de fraction a entier, faire un return de fraction( fraction.num + entier * fraction.den , fraction.den )
+    de entier a fraction, faire un return de fraction( entier * fraction.den + fraction.num , fraction.den )
+
+- : de fraction a fraction, faire un return de fraction( fraction1.num * fraction2.den - fraction2.num * fraction1.den , fraction1.den * fraction2.den )
+    de fraction a entier, faire un return de fraction( fraction.num - entier * fraction.den , fraction.den )
+    de entier a fraction, faire un return de fraction( entier * fraction.den - fraction.num , fraction.den )
+
+/ : de fraction a fraction, faire un return de fraction( fraction1.num * fraction2.den , fraction1.den * fraction2.num )
+    de fraction a entier, faire un return de fraction( fraction.num , fraction.den * entier )
+    de entier a fraction, faire un return de fraction( entier * fraction.den , fraction.num )
+*/
