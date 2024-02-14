@@ -1,3 +1,18 @@
+/////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
+/////AUTHOR: Maxime Abade <https://github.com/maximeabade>          /////
+/////VERSION: 1.0                                                   /////
+/////DATE OF CREATE: 24/01/2024                                     /////
+/////DATE OF LAST MODIF: 24/01/2024                                 /////
+/////NAME: main                                                     /////
+/////INPUTS:                                                        /////
+/////OUTPUTS: print de gurilandes de lights                         /////
+/////BRIEF: permet de montrer qu on peut surcharger un operator sur /////                                                               
+/////       le sobjets light et guirlande                           /////
+/////                                                               /////
+/////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
+
 #include <iostream>
 #include "Guirlande.hpp"
 #include "Light.hpp"

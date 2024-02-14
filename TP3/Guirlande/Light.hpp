@@ -1,3 +1,5 @@
+
+
 #ifndef __LIGHT_HPP__
 #define __LIGHT_HPP__
 
