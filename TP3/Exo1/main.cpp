@@ -1,3 +1,17 @@
+/////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
+/////AUTHOR: Maxime Abade <https://github.com/maximeabade>          /////
+/////VERSION: 1.0                                                   /////
+/////DATE OF CREATE: 26/01/2024                                     /////
+/////DATE OF LAST MODIF: 14/02/2024                                 /////
+/////NAME: MAIN.CPP                                                 /////
+/////INPUTS:int, fractions                                          /////
+/////OUTPUTS: exit_success                                          /////
+/////BRIEF: utilisation des surcharges des opérateurs sur les       /////                                                               
+/////        fractions                                              /////
+/////                                                               /////
+/////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
 using namespace std;
 
 #include <iostream>
