@@ -1,70 +1,50 @@
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-/////AUTHOR: Maxime Abade <https://github.com/maximeabade>          /////
-/////VERSION: 1.0                                                   /////
-/////DATE OF CREATE: 24/01/2024                                     /////
-/////DATE OF LAST MODIF: 24/01/2024                                 /////
-/////NAME: main                                                     /////
-/////INPUTS:                                                        /////
-/////OUTPUTS: print de gurilandes de lights                         /////
-/////BRIEF: permet de montrer qu on peut surcharger un operator sur /////                                                               
-/////       le sobjets light et guirlande                           /////
-/////                                                               /////
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
+using namespace std;
 
 #include <iostream>
 #include "Guirlande.hpp"
-#include "Light.hpp"
 
+int main(){
+    // Create a guirlande with the specified number of lights
+    Guirlande MaGuirlande1(1);
+    Guirlande MaGuirlande2(1);
 
-int main() {
-  // Création de guirlandes
-  Guirlande guirlande1(5), guirlande2(3);
-  for (int i = 0; i < 5; i++) {
-    // Correction : Utilisez le constructeur par défaut de Light
-    guirlande1.lights[i] = Light();
-    guirlande1.lights[i].turnOn(); // Ou utilisez cette ligne si vous voulez allumer les lumières avec une alternance
-  }
-  for (int i = 0; i < 3; i++) {
-    // Correction : Utilisez le constructeur par défaut de Light
-    guirlande2.lights[i] = Light();
-    guirlande2.lights[i].turnOn(); // Ou utilisez cette ligne si vous voulez allumer les lumières avec une alternance
-  }
+    // Toggle the guirlande
+    MaGuirlande2.toggle();
 
-  // Concaténation
-  Guirlande guirlande3 = guirlande1 + guirlande2;
-  std::cout << "Guirlande 3 (concaténation): ";
-  guirlande3.print();
+    // Create a guirlande wich is the sum of the two previous ones
+    Guirlande MaGuirlande = MaGuirlande1 + MaGuirlande2;
+    cout << MaGuirlande << endl;
 
-  // Soustraction
-  Guirlande guirlande4 = guirlande1 - guirlande2;
-  std::cout << "Guirlande 4 (soustraction): ";
-  guirlande4.print();
+    // Toggle the guirlande
+    MaGuirlande.toggle();
+    cout << MaGuirlande << endl;
 
-  // Répétition
-  Guirlande guirlande5 = guirlande1 * 3;
-  std::cout << "Guirlande 5 (répétition): ";
-  guirlande5.print();
+    // Multiply the guirlande by 5
+    MaGuirlande*=5;
+    cout << MaGuirlande << endl;
 
-  // Division
-  Guirlande* guirlande6 = guirlande1/4;
-  for (int i = 0; i < guirlande1.nbLights / 4; i++) {
-    std::cout << "Guirlande " << i + 6 << " (division): ";
-    guirlande6[i].print();
-  }
+    // Toggle the guirlande
+    MaGuirlande.toggle();
+    cout << MaGuirlande << endl;
 
-  // Allumer/éteindre tout
-  guirlande1.turnAllOn();
-  guirlande1.print();
-  guirlande1.turnAllOff();
-  guirlande1.print();
+    // MaGuirlande1 is the division of MaGuirlande by 3
+    MaGuirlande1=MaGuirlande/3;
 
-  // Comparaison
-  if (guirlande1 == guirlande2) {
-    std::cout << "Les guirlandes sont identiques" << std::endl;
-  } else {
-    std::cout << "Les guirlandes sont différentes" << std::endl;
-  }
-  return 0;
+    // Turn the guirlande off
+    MaGuirlande1.off();
+    cout << MaGuirlande1 << endl;
+
+    // Turn the guirlande on
+    MaGuirlande1.on();
+    cout << MaGuirlande1 << endl;
+
+    // MaGuirlande is the multiplication of MaGuirlande1 by 5
+    MaGuirlande=5*MaGuirlande1;
+    cout << MaGuirlande << endl;
+
+    // MaGuirlande2 is the subtraction of MaGuirlande1 by MaGuirlande
+    MaGuirlande2=MaGuirlande1-MaGuirlande;
+    cout << MaGuirlande2 << endl;   
+
+    return EXIT_SUCCESS;
 }

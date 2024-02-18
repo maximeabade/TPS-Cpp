@@ -1,119 +1,227 @@
+/**
+ * @file Guirlande.cpp
+ * @author ABADE Maxime <maximeabade@gmail.com>
+ * @brief 
+ * @version 0.1
+ * @date 2024-02-12
+ * 
+ * @copyright Copyright (c) 2024
+ * 
+ */
 #include "Guirlande.hpp"
 
-Guirlande::Guirlande(int nbLights) {
-  this->nbLights = nbLights;
-  lights = new Light[nbLights]; // Allouer de la mémoire pour les lumières
+/**
+ * @brief Construct a new Guirlande:: Guirlande object
+ * 
+ * @param numberOfLights 
+ */
+Guirlande::Guirlande(int numberOfLights) : numberOfLights(numberOfLights) {
+    lights = new Light[numberOfLights];
+    stateBeforeOff = std::vector<bool>(numberOfLights);
 }
 
-Guirlande::Guirlande() {
-  this->nbLights = 0;
-  lights = nullptr;
+/**
+ * @brief Construct a new Guirlande:: Guirlande object
+ * 
+ * @param other 
+ */
+Guirlande::Guirlande(const Guirlande& other) : numberOfLights(other.numberOfLights), stateBeforeOffSet(false) {
+    lights = new Light[numberOfLights];
+    for (int i = 0; i < numberOfLights; ++i) {
+        lights[i] = other.lights[i];
+    }
 }
 
+/**
+ * @brief Destroy the Guirlande:: Guirlande object
+ * 
+ */
 Guirlande::~Guirlande() {
-  delete[] lights; // Libérer la mémoire
+    delete[] lights;
 }
 
-Guirlande Guirlande::operator+(const Guirlande& guirlande) const {
-    int newNbLights = this->nbLights + guirlande.nbLights;
-    Guirlande newGuirlande(newNbLights);
+/**
+ * @brief Get the Lights object
+ * 
+ * @return Light* 
+ */
+int Guirlande::getNumberOfLights() const {
+    return numberOfLights;
+}
 
-    for (int i = 0; i < this->nbLights; i++) {
-        newGuirlande.lights[i] = this->lights[i];
+/**
+ * @brief Get the Lights object
+ * 
+ * @return Light* 
+ */
+Light* Guirlande::getLights() const {
+    return lights;
+}
+
+/**
+ * @brief Assignment operator for the Guirlande class
+ * 
+ * @param other 
+ * @return Guirlande& 
+ */
+Guirlande& Guirlande::operator=(const Guirlande& other) {
+    if (this != &other) {
+        delete[] lights;
+        numberOfLights = other.numberOfLights;
+        lights = new Light[numberOfLights];
+        for (int i = 0; i < numberOfLights; ++i) {
+            lights[i] = other.lights[i];
+        }
     }
+    return *this;
+}
 
-    for (int i = 0; i < guirlande.nbLights; i++) {
-        newGuirlande.lights[i + this->nbLights] = guirlande.lights[i];
+/**
+ * @brief Multiplication operator for the Guirlande class
+ * 
+ * @param n 
+ * @return Guirlande& 
+ */
+Guirlande& Guirlande::operator*=(int n) {
+    Guirlande result(numberOfLights * n);
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < numberOfLights; ++j) {
+            result.lights[i*numberOfLights+j] = lights[j];
+        }
     }
-
-    return newGuirlande;
+    *this = result;
+    return *this;
 }
 
-Guirlande Guirlande::operator-(const Guirlande& guirlande) const {
-  if (guirlande.nbLights > this->nbLights) {
-    throw std::out_of_range("La guirlande à soustraire ne peut pas être plus grande que la guirlande de base");
-  }
-  Guirlande newGuirlande(this->nbLights); // Créer une nouvelle guirlande avec la même taille
-  int j = 0;
-  for (int i = 0; i < this->nbLights; i++) {
-    bool found = false;
-    for (int k = 0; k < guirlande.nbLights; k++) {
-      if (this->lights[i] == guirlande.lights[k]) {
-        found = true;
-        break;
-      }
+/**
+ * @brief Turns on the guirlande but keep the same order of the lights as before.
+ * 
+ */
+void Guirlande::on() {
+    if (stateBeforeOffSet)
+    {
+        for (int i = 0; i < numberOfLights; ++i) {
+            if (stateBeforeOff[i]) {
+                lights[i].on();
+            }
+        }
+    } else {
+        for (int i = 0; i < numberOfLights; ++i) {
+            if (i%2 == 0){
+                lights[i].on();
+            }
+        }
     }
-    if (!found) {
-      newGuirlande.lights[j++] = this->lights[i];
+    
+}
+
+/**
+ * @brief Turns off all the lights in the guirlande.
+ * 
+ */
+void Guirlande::off(){
+    stateBeforeOff.clear();
+    for (int i = 0; i < numberOfLights; ++i)
+    {
+        stateBeforeOff.push_back(lights[i].IsOn());
+        lights[i].off();
     }
-  }
-  return newGuirlande;
+    stateBeforeOffSet = true;
 }
 
-Guirlande Guirlande::operator*(int n) const {
-  if (n < 0) {
-    throw std::invalid_argument("Le nombre de répétitions ne peut pas être négatif");
-  }
-  Guirlande newGuirlande(this->nbLights * n); // Créer une nouvelle guirlande avec la taille multipliée par n
-  for (int i = 0; i < n; i++) {
-    for (int j = 0; j < this->nbLights; j++) {
-      newGuirlande.lights[i * this->nbLights + j] = this->lights[j];
+/**
+ * @brief Toggles the state of all the lights in the guirlande
+ * 
+ */
+void Guirlande::toggle() {
+    for (int i = 0; i < numberOfLights; ++i) {
+        lights[i].toggle();
     }
-  }
-  return newGuirlande;
 }
 
-void Guirlande::print() const {
-  for (int i = 0; i < this->nbLights; i++) {
-    std::cout << lights[i].isOn() << " ";
-  }
-  std::cout << std::endl;
-}
-
-void Guirlande::turnAllOn() {
-  for (int i = 0; i < nbLights; i++) {
-    lights[i].turnOn();
-  }
-}
-
-void Guirlande::turnAllOff() {
-  for (int i = 0; i < nbLights; i++) {
-    lights[i].turnOff();
-  }
-}
-
-bool Guirlande::operator==(const Guirlande& guirlande) const {
-  if (this->nbLights != guirlande.nbLights) {
-    return false;
-  }
-  for (int i = 0; i < this->nbLights; i++) {
-    if (this->lights[i] != guirlande.lights[i]) {
-      return false;
+/**
+ * @brief Overloaded stream insertion operator for the Guirlande class
+ * 
+ * @param out 
+ * @param guirlande
+ * @return std::ostream& 
+ */
+std::ostream& operator<<(std::ostream& out, const Guirlande& guirlande) {
+    for (int i = 0; i < guirlande.numberOfLights; ++i) {
+        out << guirlande.lights[i];
     }
-  }
-  return true;
+    out << '\n';
+    return out;
 }
 
-bool Guirlande::operator!=(const Guirlande& guirlande) const {
-  return !(*this == guirlande);
-}
-
-//methode divide
-
-Guirlande* Guirlande::operator/(int divisor) const {
-  if (divisor <= 0) {
-    throw std::invalid_argument("Le diviseur doit être un entier positif");
-  }
-
-  int newNbLights = nbLights / divisor;
-  Guirlande* guirlandeArray = new Guirlande[newNbLights];
-
-  for (int i = 0; i < newNbLights; i++) {
-    guirlandeArray[i] = Guirlande(divisor);
-    for (int j = 0; j < divisor; j++) {
-      guirlandeArray[i].lights[j] = lights[i * divisor + j];
+/**
+ * @brief Sum operator for the Guirlande class
+ * 
+ * @param g1 Guirlande
+ * @param g2 Guirlande
+ * @return Guirlande 
+ */
+Guirlande operator+(const Guirlande& g1, const Guirlande& g2) {
+    Guirlande result(g1.getNumberOfLights() + g2.getNumberOfLights());
+    for (int i = 0; i < g1.getNumberOfLights(); ++i) {
+        result.getLights()[i] = g1.getLights()[i];
     }
-  }
+    for (int i = 0; i < g2.getNumberOfLights(); ++i) {
+        result.getLights()[i+g1.getNumberOfLights()] = g2.getLights()[i];
+    }
+    return result;
+}
 
-  return guirlandeArray;
+/**
+ * @brief Division operator for the Guirlande class
+ * 
+ * @param g1 Guirlande
+ * @param n Integer
+ * @return Guirlande 
+ */
+Guirlande operator/(const Guirlande& g1, int n) {
+    Guirlande result(g1.getNumberOfLights() / n);
+    for (int i = 0; i < result.getNumberOfLights(); ++i) {
+        result.getLights()[i] = g1.getLights()[i];
+    }
+    return result;
+}
+
+/**
+ * @brief Multiplication operator for the Guirlande class
+ * 
+ * @param g1 Guirlande
+ * @param n Integer
+ * @return Guirlande 
+ */
+Guirlande operator*(int n, const Guirlande& g1) { 
+    Guirlande result(0);
+    for (int i = 0; i < n; i++)
+    {
+        result = result + g1;
+    }
+    return result;
+}
+
+/**
+ * @brief Subtraction operator for the Guirlande class
+ * 
+ * @param g1 Guirlande
+ * @param g2 Guirlande
+ * @return Guirlande 
+ */
+Guirlande operator-(const Guirlande& g1, const Guirlande& g2) {
+    if (g1.getNumberOfLights() > g2.getNumberOfLights()) {
+        Guirlande result(g1.getNumberOfLights()-g2.getNumberOfLights());
+        for (int i = 0; i < result.getNumberOfLights(); ++i) {
+            result.getLights()[i] = g1.getLights()[i];
+        }
+        return result;
+    } else {
+        Guirlande result(g2.getNumberOfLights()-g1.getNumberOfLights());
+        for (int i = 0; i < result.getNumberOfLights(); ++i) {
+            result.getLights()[i] = g2.getLights()[i];
+        }
+        return result;
+    }
 }

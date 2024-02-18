@@ -1,23 +1,34 @@
-
-
 #ifndef __LIGHT_HPP__
 #define __LIGHT_HPP__
 
-#include <iostream>
+#include <iostream> // Include the missing header file
 
-class Light {
-public:
-  bool status;
+class Light
+{
+    private:
+        bool state;        // Indique si la lumière est allumée (true) ou éteinte (false).
+    protected:
+    public:
+        Light ();      // Constructeur par défaut qui crée une lumière éteinte
+        ~Light();      // Destructeur
 
-  // Retirez la déclaration de toutes les fonctions ici sauf le constructeur
-  Light();
-  bool isOn() const;
-  void toggle();
-  void turnOn();
-  void turnOff();
+        /**
+         * @brief Turn the light on
+         * 
+         */
+        void on();
 
-  bool operator==(const Light& other) const;
-  bool operator!=(const Light& other) const;
+        /**
+         * @brief Turn the light off
+         * 
+         */
+        void off();
+
+        void toggle(); // Si la lumière est allumée, elle sera éteinte et vice versa.
+        bool IsOn();   // Retourne true si la lumière est allumée, false sinon
+
+        // Declare the friend function properly
+        friend std::ostream& operator << (std::ostream& out, const Light& l);
 };
 
 #endif

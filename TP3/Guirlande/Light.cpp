@@ -1,30 +1,63 @@
+/**
+ * @file Light.cpp
+ * @author ABADE Maxime <maximeabade@gmail.com>
+ * @brief 
+ * @version 0.1
+ * @date 2024-02-09
+ * 
+ * @copyright Copyright (c) 2024
+ * 
+ */
 #include "Light.hpp"
 
-// Ne redéfinissez pas le constructeur ici, cela doit être fait dans le fichier d'implémentation
-Light::Light() {
-   status = false;
+/**
+ * @brief Default constructor for the Light class
+ */
+Light::Light() : state(false) {}
+
+/**
+ * @brief Destructor for the Light class
+ */
+Light::~Light() {}
+
+/**
+ * @brief Turn the light on
+ * 
+ */
+void Light::on() {
+    state = true;
 }
 
-bool Light::isOn() const {
-  return status;
+/**
+ * @brief Turn the light off
+ * 
+ */
+void Light::off() {
+    state = false;
 }
 
+/**
+ * @brief Toggles the state of the light
+ */
 void Light::toggle() {
-  status = !status;
+    state = !state;
 }
 
-void Light::turnOn() {
-  status = true;
+/**
+ * @brief Checks if the light is on
+ * @return true if the light is on, false otherwise
+ */
+bool Light::IsOn() {
+    return state;
 }
 
-void Light::turnOff() {
-  status = false;
-}
-
-bool Light::operator==(const Light& other) const {
-  return this->status == other.status;
-}
-
-bool Light::operator!=(const Light& other) const {
-  return !(*this == other);
+/**
+ * @brief Overloaded stream insertion operator for the Light class
+ * @param out The output stream
+ * @param l The Light object to be inserted into the stream
+ * @return The output stream
+ */
+std::ostream& operator << (std::ostream& out, const Light& l) {
+    out << (l.state ? "o" : ".");
+    return out;
 }
