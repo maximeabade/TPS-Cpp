@@ -1,24 +1,17 @@
 #ifndef AMPOULE_HPP
 #define AMPOULE_HPP
 
-#include <iostream>
 #include "Electrique.hpp"
 
 class Ampoule : public Electrique {
-protected:
-    bool etat = false;
-
 public:
-    Ampoule(); // Constructeur par défaut (optionnel)
-    Ampoule(float tension, float intensite, bool etat); // Constructeur avec paramètres
+    Ampoule(float intensite = 0);
 
-    void Allumer();
-    void Eteindre();
+    float puissance() const override;
 
-    float Calculer_puissance() const override; // Fonction virtuelle redéfinie
-
-    bool Get_etat() const { return etat; }
-    void Set_etat(bool etat) { this->etat = etat; }
+    void afficher() const;  // Supprimer le mot-clé override
+    float getIntensite() const;
+    void setIntensite(float intensite);
 };
 
 #endif // AMPOULE_HPP

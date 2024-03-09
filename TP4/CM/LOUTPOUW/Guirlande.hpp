@@ -1,20 +1,22 @@
 #ifndef GUIRLANDE_HPP
 #define GUIRLANDE_HPP
 
-#include <iostream>
-#include <vector>
+#include "Ampoule.hpp"
 #include "Electrique.hpp"
+#include <vector>
 
 class Guirlande : public Electrique {
+private:
+    std::vector<Ampoule> ampoules;
+
 public:
-    std::vector<Ampoule> liste_ampoules;
+    Guirlande(std::vector<Ampoule> ampoules);
 
-    Guirlande();
-    Guirlande(float tension, float intensite);
+    float puissance() const override;
 
-    void Ajouter_ampoule(const Ampoule& ampoule);
+    void afficher() const;
 
-    float Calculer_puissance_totale() const;
+    void allumer();
 };
 
 #endif // GUIRLANDE_HPP

@@ -1,20 +1,28 @@
+#include "Ampoule.hpp"
 #include <iostream>
-#include "Electrique.hpp"
 
-class Ampoule : public Electrique {
+using namespace std;
 
-public:
-    bool etat = false;
-    Ampoule() {}
-    Ampoule(float tension, float intensite, bool etat) : Electrique(tension, intensite), etat(etat) {}
+Ampoule::Ampoule(float intensite) : Electrique(220, intensite) {}
 
-    void Allumer() { etat = true; }
-    void Eteindre() { etat = false; }
+float Ampoule::puissance() const {
+    return tension * intensite;
+}
 
-    float Calculer_puissance() const override {
-        return etat ? tension * intensite : 0.0f;
+void Ampoule::afficher() const {
+    if (intensite == 0) {
+        cout << ".";
+    } else if (intensite <= 0.05) {
+        cout << "o";
+    } else {
+        cout << "O";
     }
+}
 
-    bool Get_etat() const { return etat; }
-    void Set_etat(bool etat) { this->etat = etat; }
-};
+float Ampoule::getIntensite() const {
+    return intensite;
+}
+
+void Ampoule::setIntensite(float intensite) {
+    this->intensite = intensite;
+}

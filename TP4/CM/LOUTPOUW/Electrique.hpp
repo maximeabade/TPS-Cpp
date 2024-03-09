@@ -1,24 +1,17 @@
 #ifndef ELECTRIQUE_HPP
 #define ELECTRIQUE_HPP
 
-#include <iostream>
-
 class Electrique {
 protected:
-    float tension = 220.0f;
+    float tension;
     float intensite;
 
 public:
-    Electrique();
-    Electrique(float tension, float intensite);
+    Electrique(float tension = 220, float intensite = 0);
 
-    virtual float Calculer_puissance() const = 0; // Fonction virtuelle pure
+    virtual float puissance() const = 0;
 
-    float Get_tension() const { return tension; }
-    void Set_tension(float tension) { this->tension = tension; }
-
-    float Get_intensite() const { return intensite; }
-    void Set_intensite(float intensite) { this->intensite = intensite; }
+    void afficher() const;
 };
 
 #endif // ELECTRIQUE_HPP

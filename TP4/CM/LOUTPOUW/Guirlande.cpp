@@ -1,21 +1,32 @@
+#include "Guirlande.hpp"
 #include <iostream>
-#include <vector>
-#include "Electrique.hpp"
-#include "Ampoule.hpp"
 
-class Guirlande : public Electrique {
-public:
-    std::vector<Ampoule> liste_ampoules;
-    Guirlande() {}
-    Guirlande(float tension, float intensite) : Electrique(tension, intensite) {}
+using namespace std;
 
-    void Ajouter_ampoule(const Ampoule& ampoule) { liste_ampoules.push_back(ampoule); }
-
-    float Calculer_puissance_totale() const {
-        float puissance_totale = 0.0f;
-        for (const Ampoule& ampoule : liste_ampoules) {
-            puissance_totale += ampoule.Calculer_puissance();
-        }
-        return puissance_totale;
+Guirlande::Guirlande(vector<Ampoule> ampoules) : Electrique(220, 0) {
+    this->ampoules = ampoules;
+    for (const Ampoule &ampoule : ampoules) {
+        intensite += ampoule.getIntensite();
     }
-};
+}
+
+float Guirlande::puissance() const {
+    float puissanceTotale = 0;
+    for (const Ampoule &ampoule : ampoules) {
+        puissanceTotale += ampoule.puissance();
+    }
+    return puissanceTotale;
+}
+
+void Guirlande::afficher() const {
+    Electrique::afficher();
+    for (const Ampoule &ampoule : ampoules) {
+        ampoule.afficher();
+    }
+}
+
+void Guirlande::allumer() {
+    for (Ampoule &ampoule : ampoules) {
+        ampoule.setIntensite(0.1);
+    }
+}
