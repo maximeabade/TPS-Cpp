@@ -8,7 +8,7 @@ using namespace std;
 int main() {
     // Création des ampoules
     Ampoule a1(0.05);
-    Ampoule a2(0.1);
+    Ampoule a2(0.01);
 
     // Création d'une guirlande
     vector<Ampoule> ampoules = {a1, a2};
@@ -21,11 +21,9 @@ int main() {
     guirlande.allumer();
 
     // Affichage après allumage
-    cout << endl;
     guirlande.afficher();
 
     // Calcul et affichage de la puissance consommée par chaque guirlande
-    cout << endl;
     cout << "Puissance consommée par la guirlande : " << guirlande.puissance() << "W" << endl;
 
     return 0;

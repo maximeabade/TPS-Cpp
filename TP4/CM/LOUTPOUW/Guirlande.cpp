@@ -23,6 +23,7 @@ void Guirlande::afficher() const {
     for (const Ampoule &ampoule : ampoules) {
         ampoule.afficher();
     }
+    printf("\n");
 }
 
 void Guirlande::allumer() {
