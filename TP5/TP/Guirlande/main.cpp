@@ -1,30 +1,81 @@
-#include "Ampoule.hpp"
-#include "Electrique.hpp"
-#include "Guirlande.hpp"
 #include <iostream>
+#include <fstream>
+#include <vector>
+#include <sstream>
+
+#include "Ampoule.hpp"
+#include "Guirlande.hpp"
 
 using namespace std;
 
 int main() {
-    // Création des ampoules
-    Ampoule a1(0.05);
-    Ampoule a2(0.01);
+    //ecrivons des guirlandes dans "guirlandes.txt"
+    ofstream fichier("guirlandes.txt");
+    // Variables for guirlande creation
+    string fichierName = "guirlandes.txt"; // File name
+    vector<Guirlande> guirlandes; // Vector to store guirlandes
 
-    // Création d'une guirlande
-    vector<Ampoule> ampoules = {a1, a2};
-    Guirlande guirlande(ampoules);
+    // Open the file for reading
+    ifstream fichier(fichierName);
+    if (!fichier.is_open()) {
+        cerr << "Error: Could not open file '" << fichierName << "'" << endl;
+        return 1; // Exit with error code
+    }
 
-    // Affichage initial
-    guirlande.afficher();
+    // Read the file line by line
+    string line;
+    while (getline(fichier, line)) {
+        // Process each line to create a Guirlande
+        vector<Ampoule> ampoules;
+        float coutCable;
 
-    // Allumage de toutes les ampoules
-    guirlande.allumer();
+        // Extract data from the line using stringstream
+        stringstream ss(line);
+        string data;
 
-    // Affichage après allumage
-    guirlande.afficher();
+        // Read number of ampoules
+        int nbAmpoules;
+        if (ss >> nbAmpoules) {
+            // Read data for each ampoule
+            for (int i = 0; i < nbAmpoules; ++i) {
+                if (ss >> data) {
+                    // Convert string to float (assuming data represents intensity)
+                    float intensite = stof(data);
+                    ampoules.push_back(Ampoule(intensite));
+                } else {
+                    cerr << "Error: Invalid data format in line: " << line << endl;
+                    break; // Skip to next line on error
+                }
+            }
 
-    // Calcul et affichage de la puissance consommée par chaque guirlande
-    cout << "Puissance consommée par la guirlande : " << guirlande.puissance() << "W" << endl;
+            // Read cable cost
+            if (ss >> coutCable) {
+                // Create a Guirlande and calculate price
+                Guirlande guirlande(ampoules, coutCable);
+                guirlandes.push_back(guirlande);
+            } else {
+                cerr << "Error: Invalid data format in line: " << line << endl;
+            }
+        } else {
+            cerr << "Error: Invalid data format in line: " << line << endl;
+        }
+    }
 
-    return 0;
+    // Close the file
+    fichier.close();
+
+    // Write guirlande data to a new file (optional)
+    string outputFileName = " guirlandes_data.txt";
+    ofstream outputFile(outputFileName);
+    if (outputFile.is_open()) {
+        for (const Guirlande& guirlande : guirlandes) {
+            outputFile << "Prix de vente minimum: " << guirlande.getPrixVente() << " euros" << endl;
+        }
+        outputFile.close();
+        cout << "Guirlande data written to: " << outputFileName << endl;
+    } else {
+        cerr << "Error: Could not create output file '" << outputFileName << "'" << endl;
+    }
+
+    return 0; // Exit successfully
 }
