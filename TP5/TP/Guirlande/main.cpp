@@ -1,104 +1,40 @@
 #include <iostream>
-#include <fstream>
 #include <vector>
-#include <sstream>
-
-#include "Ampoule.hpp"
 #include "Guirlande.hpp"
+#include "Ampoule.hpp"
+#include "Electrique.hpp"
 
 using namespace std;
 
 int main() {
-    // Write guirlandes to "guirlandes.txt"
-    string fichierName = "guirlandes.txt";
-    vector<Guirlande> guirlandesToWrite;
 
-    // Create 10 guirlandes
-    for (int i = 0; i < 10; ++i) {
-        vector<Ampoule> ampoules;
-        for (int j = 0; j < 5; ++j) {
-            float intensite = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
-            ampoules.push_back(Ampoule(intensite));
-        }
+  // Déclaration du chemin du fichier
+  string path = "./guirlandes.txt";
 
-        float coutCable = static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 90 + 10;
-        Guirlande guirlande(ampoules, coutCable);
-        guirlandesToWrite.push_back(guirlande);
-    }
+  // Lecture des guirlandes depuis le fichier
+  vector<Guirlande> guirlandes = Guirlande::read(path);
 
-    ofstream fichier(fichierName);
-    if (fichier.is_open()) {
-        for (const Guirlande& guirlande : guirlandesToWrite) {
-            fichier << guirlande.getAmpoules().size() << " ";
-            for (const Ampoule& ampoule : guirlande.getAmpoules()) {
-                fichier << ampoule.getIntensite() << " ";
-            }
-            fichier << guirlande.getCoutCable() << endl;
-        }
-        fichier.close();
-        cout << "Guirlandes written to: " << fichierName << endl;
-    } else {
-        cerr << "Error: Could not create file '" << fichierName << "'" << endl;
-    }
+  // Parcours des guirlandes
+  for (Guirlande guirlande : guirlandes) {
 
-    vector<Guirlande> guirlandes;
+    // Calcul du prix total avant marge
+    guirlande.setPriceTotalBeforeMargin(guirlande.getPriceAmpoules() + guirlande.getPriceCable());
 
-    ifstream fichierLecture(fichierName); // Renamed to avoid conflict
-    if (!fichierLecture.is_open()) {
-        cerr << "Error: Could not open file '" << fichierName << "'" << endl;
-        return 1;
-    }
+    // Calcul du prix total après marge
+    guirlande.setPriceTotalAfterMargin(guirlande.getPriceTotalBeforeMargin() * 1.1);
 
-    string line;
-    while (std::getline(fichierLecture, line)) {
-        vector<Ampoule> ampoules;
-        float coutCable;
+    // Affichage des informations de la guirlande
+    cout << "Guirlande : " << guirlande.getRepresentation() << endl;
+    cout << "  - Longueur : " << guirlande.getLength() << endl;
+    cout << "  - Prix ampoules : " << guirlande.getPriceAmpoules() << endl;
+    cout << "  - Prix câble : " << guirlande.getPriceCable() << endl;
+    cout << "  - Prix total avant marge : " << guirlande.getPriceTotalBeforeMargin() << endl;
+    cout << "  - Prix total après marge : " << guirlande.getPriceTotalAfterMargin() << endl;
+    cout << endl;
 
-        stringstream ss(line);
-        string data;
+    // Ecriture de la guirlande et de son prix dans un fichier
+    Guirlande::write("./guirlandes_data.txt", guirlande);
+  }
 
-        int nbAmpoules;
-        if (ss >> nbAmpoules) {
-            for (int i = 0; i < nbAmpoules; ++i) {
-                if (ss >> data) {
-                    float intensite;
-                    try {
-                        intensite = stof(data);
-                        ampoules.push_back(Ampoule(intensite));
-                    } catch (const std::invalid_argument& e) {
-                        cerr << "Error: Invalid data format in line: " << line << endl;
-                        break;
-                    }
-                } else {
-                    cerr << "Error: Invalid data format in line: " << line << endl;
-                    break;
-                }
-            }
-
-            if (ss >> coutCable) {
-                Guirlande guirlande(ampoules, coutCable);
-                guirlandes.push_back(guirlande);
-            } else {
-                cerr << "Error: Invalid data format in line: " << line << endl;
-            }
-        } else {
-            cerr << "Error: Invalid data format in line: " << line << endl;
-        }
-    }
-
-    fichierLecture.close();
-
-    string outputFileName = "guirlandes_data.txt"; // Removed extra space
-    ofstream outputFile(outputFileName);
-    if (outputFile.is_open()) {
-        for (const Guirlande& guirlande : guirlandes) {
-            outputFile << "Prix de vente minimum: " << guirlande.getPrixVente() << " euros" << endl;
-        }
-        outputFile.close();
-        cout << "Guirlande data written to: " << outputFileName << endl;
-    } else {
-        cerr << "Error: Could not create output file '" << outputFileName << "'" << endl;
-    }
-
-    return 0;
+  return 0;
 }

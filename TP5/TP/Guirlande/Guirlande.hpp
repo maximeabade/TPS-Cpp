@@ -1,82 +1,50 @@
+
 #ifndef GUIRLANDE_HPP
 #define GUIRLANDE_HPP
 
-#include "Ampoule.hpp"
-#include <vector>
 
+#include "Electrique.hpp"
+#include "Ampoule.hpp"
+#include <fstream>
+#include <iostream>
+#include <vector>
+#include <string>
 using namespace std;
 
-class Guirlande : public Electrique {
-private:
-    vector<Ampoule> ampoules;
-    float coutProduction; // Ajout du coût de production
+class Guirlande {
+    public:
+        Guirlande();
+        Guirlande(int length);
+        void addAmpoule(Ampoule ampoule);
+        void display() const;
+        double getPrice() const;
+        void setPrice(double price);
+        int getLength() const;
+        vector<Ampoule> ampoules;
+        int length;
+        string representation;
+        string getRepresentation() const;
+        double price;
+        double priceCable;
+        double getPriceCable() const;
+        void setPriceCable(double priceCable);
+        double priceAmpoules;
+        double getPriceAmpoules() const;
+        void setPriceAmpoules(double priceAmpoules);
+        double priceTotalBeforeMargin;
+        double getPriceTotalBeforeMargin() const;
+        void setPriceTotalBeforeMargin(double priceTotalBeforeMargin);
+        double priceTotalAfterMargin;
+        double getPriceTotalAfterMargin() const;
+        void setPriceTotalAfterMargin(double priceTotalAfterMargin);
 
-public:
-    Guirlande(vector<Ampoule> ampoules, float coutCable);
-    
-    float puissance() const;
+        //read du fichier "guirlandes.txt" ==> getLine pour chaque guirlande, sa reorésentation sera "oOOooo" par exemple
+        static vector<Guirlande> read(const string& path);
+        
+        //ecriture de la guirlande et de son prix dans un fichier
+        static void write(const string& path, const Guirlande& guirlande);
 
-    void afficher() const override;
-
-    void allumer();
-    vector<Ampoule> getAmpoules() const; // Ajout de la fonction getAmpoules
-    float getPrixVente() const; // Ajout du prix de vente
-    double getCoutCable() const; // Ajout du coût de production
-private:
-    float calculerCoutProduction(float coutCable); // Fonction pour calculer le coût de production
 };
 
-Guirlande::Guirlande(vector<Ampoule> ampoules, float coutCable) : Electrique(220, 0) {
-    this->ampoules = ampoules;
-    for (const Ampoule &ampoule : ampoules) {
-        intensite += ampoule.getIntensite();
-    }
-    coutProduction = calculerCoutProduction(coutCable);
-}
-
-//fonction getCoutCable qui va dependre du nombre d ampoules
-double Guirlande::getCoutCable() const {
-    return 1.1 * ampoules.size();
-}
-
-//fonction getAmpoules
-vector<Ampoule> Guirlande::getAmpoules() const {
-    return ampoules;
-}
-
-float Guirlande::puissance() const {
-    float puissanceTotale = 0;
-    for (const Ampoule &ampoule : ampoules) {
-        puissanceTotale += ampoule.puissance();
-    }
-    return puissanceTotale;
-}
-
-void Guirlande::afficher() const {
-    Electrique::afficher();
-    for (const Ampoule &ampoule : ampoules) {
-        ampoule.afficher();
-    }
-    printf("\n");
-}
-
-void Guirlande::allumer() {
-    for (Ampoule &ampoule : ampoules) {
-        ampoule.setIntensite(0.1);
-    }
-}
-
-float Guirlande::getPrixVente() const {
-    float marge = 0.1; // Marge de 10%
-    return coutProduction * (1 + marge);
-}
-
-float Guirlande::calculerCoutProduction(float coutCable) {
-    float coutTotal = 0;
-    for (const Ampoule &ampoule : ampoules) {
-        coutTotal += ampoule.getPrixAchat();
-    }
-    return coutTotal + coutCable;
-}
-
 #endif // GUIRLANDE_HPP
+
