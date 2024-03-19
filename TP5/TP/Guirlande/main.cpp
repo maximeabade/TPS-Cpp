@@ -9,48 +9,73 @@
 using namespace std;
 
 int main() {
-    //ecrivons des guirlandes dans "guirlandes.txt"
-    ofstream fichier("guirlandes.txt");
-    // Variables for guirlande creation
-    string fichierName = "guirlandes.txt"; // File name
-    vector<Guirlande> guirlandes; // Vector to store guirlandes
+    // Write guirlandes to "guirlandes.txt"
+    string fichierName = "guirlandes.txt";
+    vector<Guirlande> guirlandesToWrite;
 
-    // Open the file for reading
-    ifstream fichier(fichierName);
-    if (!fichier.is_open()) {
-        cerr << "Error: Could not open file '" << fichierName << "'" << endl;
-        return 1; // Exit with error code
+    // Create 10 guirlandes
+    for (int i = 0; i < 10; ++i) {
+        vector<Ampoule> ampoules;
+        for (int j = 0; j < 5; ++j) {
+            float intensite = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
+            ampoules.push_back(Ampoule(intensite));
+        }
+
+        float coutCable = static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 90 + 10;
+        Guirlande guirlande(ampoules, coutCable);
+        guirlandesToWrite.push_back(guirlande);
     }
 
-    // Read the file line by line
+    ofstream fichier(fichierName);
+    if (fichier.is_open()) {
+        for (const Guirlande& guirlande : guirlandesToWrite) {
+            fichier << guirlande.getAmpoules().size() << " ";
+            for (const Ampoule& ampoule : guirlande.getAmpoules()) {
+                fichier << ampoule.getIntensite() << " ";
+            }
+            fichier << guirlande.getCoutCable() << endl;
+        }
+        fichier.close();
+        cout << "Guirlandes written to: " << fichierName << endl;
+    } else {
+        cerr << "Error: Could not create file '" << fichierName << "'" << endl;
+    }
+
+    vector<Guirlande> guirlandes;
+
+    ifstream fichierLecture(fichierName); // Renamed to avoid conflict
+    if (!fichierLecture.is_open()) {
+        cerr << "Error: Could not open file '" << fichierName << "'" << endl;
+        return 1;
+    }
+
     string line;
-    while (getline(fichier, line)) {
-        // Process each line to create a Guirlande
+    while (std::getline(fichierLecture, line)) {
         vector<Ampoule> ampoules;
         float coutCable;
 
-        // Extract data from the line using stringstream
         stringstream ss(line);
         string data;
 
-        // Read number of ampoules
         int nbAmpoules;
         if (ss >> nbAmpoules) {
-            // Read data for each ampoule
             for (int i = 0; i < nbAmpoules; ++i) {
                 if (ss >> data) {
-                    // Convert string to float (assuming data represents intensity)
-                    float intensite = stof(data);
-                    ampoules.push_back(Ampoule(intensite));
+                    float intensite;
+                    try {
+                        intensite = stof(data);
+                        ampoules.push_back(Ampoule(intensite));
+                    } catch (const std::invalid_argument& e) {
+                        cerr << "Error: Invalid data format in line: " << line << endl;
+                        break;
+                    }
                 } else {
                     cerr << "Error: Invalid data format in line: " << line << endl;
-                    break; // Skip to next line on error
+                    break;
                 }
             }
 
-            // Read cable cost
             if (ss >> coutCable) {
-                // Create a Guirlande and calculate price
                 Guirlande guirlande(ampoules, coutCable);
                 guirlandes.push_back(guirlande);
             } else {
@@ -61,11 +86,9 @@ int main() {
         }
     }
 
-    // Close the file
-    fichier.close();
+    fichierLecture.close();
 
-    // Write guirlande data to a new file (optional)
-    string outputFileName = " guirlandes_data.txt";
+    string outputFileName = "guirlandes_data.txt"; // Removed extra space
     ofstream outputFile(outputFileName);
     if (outputFile.is_open()) {
         for (const Guirlande& guirlande : guirlandes) {
@@ -77,5 +100,5 @@ int main() {
         cerr << "Error: Could not create output file '" << outputFileName << "'" << endl;
     }
 
-    return 0; // Exit successfully
+    return 0;
 }

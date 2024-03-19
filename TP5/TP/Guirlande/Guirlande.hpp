@@ -13,15 +13,15 @@ private:
 
 public:
     Guirlande(vector<Ampoule> ampoules, float coutCable);
-
+    
     float puissance() const;
 
     void afficher() const override;
 
     void allumer();
-
+    vector<Ampoule> getAmpoules() const; // Ajout de la fonction getAmpoules
     float getPrixVente() const; // Ajout du prix de vente
-
+    double getCoutCable() const; // Ajout du coût de production
 private:
     float calculerCoutProduction(float coutCable); // Fonction pour calculer le coût de production
 };
@@ -32,6 +32,16 @@ Guirlande::Guirlande(vector<Ampoule> ampoules, float coutCable) : Electrique(220
         intensite += ampoule.getIntensite();
     }
     coutProduction = calculerCoutProduction(coutCable);
+}
+
+//fonction getCoutCable qui va dependre du nombre d ampoules
+double Guirlande::getCoutCable() const {
+    return 1.1 * ampoules.size();
+}
+
+//fonction getAmpoules
+vector<Ampoule> Guirlande::getAmpoules() const {
+    return ampoules;
 }
 
 float Guirlande::puissance() const {
